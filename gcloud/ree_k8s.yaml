@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ree-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: ree-server
+    spec:
+      containers:
+      - name: ree-container
+        image: asia.gcr.io/real-estate-extraction-196916/ree-flask-server:v2
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: ree-service
+  name: ree-service
+spec:
+  ports:
+  - name: ree-service
+    port: 5000
+    targetPort: 5000
+  selector:
+    app: ree-server
+  type: LoadBalancer
